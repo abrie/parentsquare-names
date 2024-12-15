@@ -35,7 +35,12 @@ func main() {
 		return
 	}
 
-	client := &http.Client{}
+	client := &http.Client{
+		CheckRedirect: func(req *http.Request, via []*http.Request) error {
+			fmt.Println("Redirected to:", req.URL)
+			return http.ErrUseLastResponse
+		},
+	}
 	req, err := http.NewRequest("POST", "https://www.parentsquare.com/sessions", nil)
 	if err != nil {
 		fmt.Println("Error creating request:", err)
